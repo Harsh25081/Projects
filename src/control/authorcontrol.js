@@ -60,7 +60,7 @@ const loginUser = async function (req, res) {
       "project1"
     );
     res.setHeader("x-auth-token", token);
-    return res.status(201).send({ status: true, data: token });
+    return res.status(201).send({ status: true, data: {"token":token} });
 
   } catch (error) {
     res.status(500).send({ status: false, msg: error.message })
