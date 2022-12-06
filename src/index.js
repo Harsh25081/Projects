@@ -4,7 +4,7 @@ const route = require("./routes/route")
 
 const app = express()
 const multer= require("multer");
-const { AppConfig } = require('aws-sdk');
+
 
 app.use(express.json())
 app.use( multer().any())

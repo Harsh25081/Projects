@@ -24,8 +24,8 @@ let uploadFile = async (file) => {
 
         var uploadParams = {
             ACL: "public-read",
-            Bucket: "classroom-training-bucket",  //HERE
-            Key: "abc/" + file.originalname, //HERE 
+            Bucket: "classroom-training-bucket",
+            Key: "abc/" + file.originalname,
             Body: file.buffer
         }
 
@@ -39,35 +39,8 @@ let uploadFile = async (file) => {
             return resolve(data.Location)
         })
 
-        // let data= await s3.upload( uploadParams)
-        // if( data) return data.Location
-        // else return "there is an error"
-
     })
 }
-
-// router.post("/write-file-aws", async function (req, res) {
-
-//     try {
-//         let files = req.files
-//         if (files && files.length > 0) {
-//             //upload to s3 and get the uploaded link
-//             // res.send the link back to frontend/postman
-//             let uploadedFileURL = await uploadFile(files[0])
-//             // res.status(201).send({msg: "file uploaded succesfully", data: uploadedFileURL})
-//             files = uploadedFileURL
-//         }
-//         else {
-//             res.status(400).send({ msg: "No file found" })
-//         }
-
-//     }
-//     catch (err) {
-//         res.status(500).send({ msg: err })
-//     }
-
-// })
-
 
 
 exports.createBook = async (req, res) => {
@@ -94,7 +67,7 @@ exports.createBook = async (req, res) => {
         if (category) category = category.trim()
         if (subcategory) subcategory = subcategory.trim()
         if (releasedAt) releasedAt = releasedAt.trim()
-
+        
         if (!title) {
             return res.status(400).send({ status: false, message: "Please enter title" })
         }

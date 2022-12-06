@@ -15,7 +15,7 @@ router.post("/register", createUser)
 router.post("/login", userLogin)
 
 
-router.post("/books",  createBook) //authentication, authorization,
+router.post("/books",  authentication, authorization,createBook) 
 router.get("/books", authentication, filterBookByQuery)
 router.get("/books/:bookId", authentication, getBookById)
 router.put("/books/:bookId", authentication, authorization, updateBookById)
