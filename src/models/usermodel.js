@@ -4,30 +4,30 @@ const userSchema = new mongoose.Schema({
 
     title: {
         type: String,
-        require: true,
+        required: true,
         enum: ["Mr", "Mrs", "Miss"],
         trim :true
     },
     name: {
         type: String,
-        require: true,
+        required: true,
         trim :true
     },
     phone: {
         type: String,
-        require: true,
+        required: true,
         unique: true,
         trim :true
     },
     email: {
         type: String,
-        require: true,
+        required: true,
         unique: true,
         trim :true
     },
     password: {
         type: String,
-        require: true,
+        required: true,
         minlength: 8,
         maxlength: 15
     },

@@ -11,6 +11,7 @@ let ISBNRegex = /^(?=(?:\D*\d){10}(?:(?:\D*\d){3})?$)[\d-]+$/
 let dateRegex = /^\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$/
 
 
+
 aws.config.update({
     accessKeyId: "AKIAY3L35MCRZNIRGT6N",
     secretAccessKey: "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",
@@ -29,7 +30,6 @@ let uploadFile = async (file) => {
             Body: file.buffer
         }
 
-
         s3.upload(uploadParams, function (err, data) {
             if (err) {
                 return reject({ "error": err })
@@ -43,12 +43,13 @@ let uploadFile = async (file) => {
 }
 
 
+
 exports.createBook = async (req, res) => {
 
     try {
         let files = req.files
-
         let uploadedFileURL = await uploadFile(files[0])
+
 
         let data = req.body
         
@@ -98,9 +99,9 @@ exports.createBook = async (req, res) => {
         if (!isValidObjectId(userId)) {
             return res.status(400).send({ status: false, message: "Invalid user id" })
         }
-        let findUserId = await userModel.findById(userId)
+        let findUserId = await userModel.findOne({_id:userId,isDeleted:false})
         if (!findUserId) {
-            return res.status(400).send({ status: false, message: "User id do not exist" })
+            return res.status(400).send({ status: false, message: "No User exists with this id" })
         }
 
         if (!category) {
@@ -151,7 +152,7 @@ exports.filterBookByQuery = async (req, res) => {
             }
         }
 
-        let filteredBook = await bookModel.find({ isDeleted: false, ...filterBy }).select({ _id: 1, title: 1, excerpt: 1, userId: 1, category: 1, releasedAt: 1, reviews: 1 }).sort({ title: 1 })
+        let filteredBook = await bookModel.find({ isDeleted: false, ...filterBy }).select({ title: 1, excerpt: 1, userId: 1, category: 1, releasedAt: 1, reviews: 1 }).sort({ title: 1 })
 
 
         if (Object.keys(filteredBook).length == 0) {
@@ -172,16 +173,16 @@ exports.getBookById = async (req, res) => {
     try {
         let bookId = req.params.bookId
         if (!isValidObjectId(bookId)) {
-            return res.status(400).send({ status: false, message: "invalid bookId" })
+            return res.status(400).send({ status: false, message: "Pls provide a valid bookId" })
         }
-        let book = await bookModel.findOne({ isDeleted: false, _id: bookId }).lean()
+        let book = await bookModel.findOne({ isDeleted: false, _id: bookId }).select({__v:0,ISBN:0}).lean()
 
         if (!book) {
             return res.status(404).send({ status: false, message: "No data found !" })
         }
 
 
-        let review = await reviewModel.find({ isDeleted: false, bookId: bookId }).select({ bookId: 1, reviewedBy: 1, reviewedAt: 1, rating: 1, review: 1 })
+        let review = await reviewModel.find({ isDeleted: false, bookId}).select({ bookId: 1, reviewedBy: 1, reviewedAt: 1, rating: 1, review: 1 })
 
         book.reviewsData = review
 
@@ -245,7 +246,7 @@ exports.deleteBookById = async (req, res) => {
         let bookDeleteById = await bookModel.findOneAndUpdate({ _id: bookId, isDeleted: false },
             { $set: { isDeleted: true, deletedAt: new Date(), reviews: 0 } })
 
-        let reviewDelete = await reviewModel.updateMany({ isDeleted: false, bookId: bookId }, { $set: { isDeleted: true } })
+        let reviewDelete = await reviewModel.updateMany({ isDeleted: false, bookId}, { $set: { isDeleted: true } })
 
         return res.status(200).send({ status: true, message: "Successfully Deleted" })
     }
