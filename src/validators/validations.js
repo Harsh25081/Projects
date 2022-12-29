@@ -53,7 +53,7 @@ const isValidPincode = function (pincode) {
 }
 
 const isValidBody=function(body){
-  if(Object.body.length!=0){
+  if(Object.keys(body).length!=0){
     return true
   }
   else{return false}
