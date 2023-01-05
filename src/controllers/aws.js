@@ -18,7 +18,6 @@ let uploadFile = async (file) => {
             Body: file.buffer
         }
 
-
         s3.upload(uploadParams, function (err, data) {
             if (err) {
                 return reject({ "error": err })
@@ -26,25 +25,18 @@ let uploadFile = async (file) => {
             console.log("file uploaded succesfully")
             return resolve(data.Location)
         })
-
-
-
     })
 }
 
 const getImage = async function (files) {
 
     try {
-       
-
             let uploadedFileURL = await uploadFile(files[0])
             return uploadedFileURL
-
     }
     catch (err) {
        return  err.message 
     }
-
 }
 
 module.exports = { getImage };

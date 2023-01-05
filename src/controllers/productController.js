@@ -79,7 +79,6 @@ const getProductByQuery = async function (req, res) {
             obj.availableSizes = { $in: size }
         }
         if (name) {
-            name=name.toLowerCase();
             obj.title = { $regex: name }
         }
         if (priceGreaterThan || priceLessThan) {

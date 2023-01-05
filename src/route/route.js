@@ -15,7 +15,7 @@ router.get("/test-me",function(req,res){
 //-------------------- user ------------------//
 router.post('/register', createUser)
 router.post('/login',userLogin)
-router.get('/user/:userId/profile',authenticationMid,authorizationMid, getUserProfile)
+router.get('/user/:userId/profile',authenticationMid, getUserProfile)
 router.put('/user/:userId/profile',authenticationMid,authorizationMid,UpdateUser)
 
 //------------------- Product ----------------//
@@ -36,7 +36,7 @@ router.post('/users/:userId/orders',authenticationMid,authorizationMid,createOrd
 router.put('/users/:userId/orders',authenticationMid,authorizationMid,updateOrder)
 
 //------------------------ error ----------------//
-router.all('/*',(req,res)=>{return res.status(400).send({status:false, message:"pls provide valid path"})})
+//router.all('/*',(req,res)=>{return res.status(400).send({status:false, message:"pls provide valid path"})})
 
 
 module.exports = router
